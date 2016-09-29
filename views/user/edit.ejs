@@ -1,0 +1,20 @@
+<form id="sign-up-form" class="form-signin" method="POST" action="/user/update/<%=user.id%>">
+  <h2>Edición de Usuario</h2>
+
+  <% if(flash && flash.err) { %>
+    <ul class="alert alert-success">
+      <% Object.keys(flash.err).forEach(function(error){ %>
+      <li><%= JSON.stringify(flash.err[error]) %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <input class="form-control" value="<%= user.firstName %>" name="firstName" type="text"/>
+  <input class="form-control" value="<%= user.title %>" name="title" type="text"/>
+  <input class="form-control" value="<%= user.userName %>" name="userName" type="text"/>
+  <input class="form-control" value="<%= user.emailAddress %>" name="emailAddress" type="text"/>
+  <input class="btn btn-lg btn-primary btn-block" type="submit" value="Proceed" />
+  <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+
+
+</form>

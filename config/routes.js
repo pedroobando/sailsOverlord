@@ -39,6 +39,11 @@ module.exports.routes = {
   '/user/new': {
     controller: 'UserController',
     action: 'new'
+  },
+
+  '/user/show': {
+    controller: 'UserController',
+    action: 'show'
   }
 
 
