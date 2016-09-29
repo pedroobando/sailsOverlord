@@ -58,7 +58,7 @@ module.exports = {
     },
 
     fullName: function() {
-      return this.firstName + ' ' + this.lastName;
+      return this.title + ' ' + this.firstName + ' ';
     },
 
     year: function () {
