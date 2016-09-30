@@ -19,12 +19,19 @@
         <td><%= user.title %></td>
         <td><%= user.userName %></td>
         <td><%= user.emailAddress %></td>
-        <td><a href="/user/show/<%= user.id %>" class="btn btn-sm btn-primary">Ver</a></td>
-        <td><a href="/user/edit/<%= user.id %>" class="btn btn-sm btn-warning">Cambiar</a></td>
-        <td><a href="/user/destroy/<%= user.id %>" class="btn btn-sm btn-danger">Borrar</a></td>
+        <td><a href="/user/show/<%= user.id %>" class="btn btn-sm btn-primary">Consultar</a></td>
+        <td><a href="/user/edit/<%= user.id %>" class="btn btn-sm btn-warning">Actualizar</a></td>
+        <td>
+          <form action="/user/destroy/<%= user.id %>" method="POST">
+            <input type="hidden" name="_method" value="delete"/>
+            <input type="submit" class="btn btn-sm btn-danger" value="Borrar"/>
+            <input type="hidden" name="_csrf" value="<%= _csrf %>"/>
+          </form>
+        </td>
       </tr>
     <% }) %>
 
   </table>
+  <a class="btn btn-medium btn-primary" href="/user/new"> Nuevo Usuario >></a>
 
 </div>

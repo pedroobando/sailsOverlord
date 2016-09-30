@@ -61,6 +61,8 @@ module.exports = {
   edit: function (req, res, next) {
     User.findOne(req.param('id'), function foundUser (err, user) {
       if (err) return next(err);
+      if (!user) return next('Usuario no existe..!'); //res.serverError('User no localizado..!');
+
       res.view({
         user: user
       });
@@ -69,6 +71,7 @@ module.exports = {
 
   update: function (req, res, next) {
     User.update(req.param('id'), req.params.all(), function updateUser(err, user) {
+
       if (err) {
         console.log(err);
         //return res.json(err);
@@ -78,7 +81,23 @@ module.exports = {
         return res.redirect('/user/edit/'+ req.param('id'));
       }
 
+      console.log(user.firstName + ' (updated)');
       res.redirect('/user/show/'+ req.param('id'));
+    });
+  },
+
+  destroy: function (req, res, next) {
+
+    User.findOne(req.param('id'),function foundUser(err, user) {
+      if (err) return next(err);
+      if (!user) return next('Usuario no existe..!');
+
+      User.destroy(req.param('id'), function userDestroy(err) {
+        if (err) return next (err);
+      });
+      console.log(user.firstName + ' (destroy)');
+      //console.log(user.firstName + ' (created)')
+      res.redirect('/user');
     });
   }
 

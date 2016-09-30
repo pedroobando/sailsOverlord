@@ -7,6 +7,7 @@
 
 module.exports = {
 
+
   // Identity is a unique name for this model and must be in lower case
   identity: 'User',
 
@@ -26,6 +27,7 @@ module.exports = {
 
   // Attributes are basic pieces of information about a model
   attributes: {
+
     firstName: {
       type: 'string',
       required: true
@@ -57,25 +59,38 @@ module.exports = {
       //required: true
     },
 
-    fullName: function() {
-      return this.title + ' ' + this.firstName + ' ';
-    },
-
-    year: function () {
-      if (!this.birthDate) {
-        return 0;
-      }
-      return 2000 - this.birthDate;
-    },
-
     toJSON: function () {
       var obj = this.toObject();
       delete obj.encryptedPassword;
-      delete obj.password;
-      delete obj.confirmation;
       delete obj._csrf;
       return obj;
     }
+  },
+
+  beforeCreate: function(values, next) {
+
+    if (!values.password || values.password != values.confirmation) {
+      //console.log('error en password')
+      return next({err: ["Verifique el password o contraseña."]});
+    }
+    //console.log('Verificacion password - (ok)')
+    //console.log('El valor del password: ' + values.password);
+
+    var bcrypt = require('bcryptjs');
+    bcrypt.hash(values.password, 10, function passwordEncrypted(err, encryptedPassword) {
+    if (err) return next(err);
+      values.encryptedPassword = encryptedPassword;
+      values.online = true;
+      next();
+    });
+    //console.log('bcryptjs aplicado - (ok)');
+
+    //var bcryptjs = require('bcryptjs');
+    //bcryptjs.hash(values.password, 10, function passwordEncrypted(err, encryptedPassword) {
+    //  values.encryptedPassword = encryptedPassword;
+    //  values.password=null;
+    //  values.confirmation=null;
+    //  next();
+    //});
   }
 };
-
