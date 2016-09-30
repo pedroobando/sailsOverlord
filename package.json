@@ -1,5 +1,5 @@
 {
-  "name": "activityOverlord",
+  "name": "sailsactivityOverlord",
   "private": true,
   "version": "0.0.1",
   "description": "A Sails application - To Training",
@@ -36,6 +36,6 @@
     "type": "git",
     "url": "git://github.com/pedroobando/sailsOverlord.git"
   },
-  "author": "pedro",
+  "author": "Pedro Obando",
   "license": ""
 }
