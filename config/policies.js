@@ -28,7 +28,14 @@ module.exports.policies = {
 
   // '*': true,
 
-  '*': 'flash'
+  '*': 'flash',
+
+  UserController: {
+    'new'   : 'flash',
+    'create': 'flash',
+    'edit'  : ['flash', 'sessionAuth'],
+    '*'     : 'sessionAuth'
+  }
 
   /***************************************************************************
   *                                                                          *

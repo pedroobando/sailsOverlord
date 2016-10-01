@@ -45,6 +45,11 @@ module.exports = {
   },
 
   index: function (req, res, next) {
+
+    //console.log(new Date());
+    //console.log(req.session.authenticated);
+
+    // Obtiene una arreglo de todos los usuarios en una Coleccion de Usuario
     User.find(function foundUsers(err, users) {
       if (err) {
         return next(err);
