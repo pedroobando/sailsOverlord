@@ -10,6 +10,7 @@
       <th></th>
       <th></th>
       <th></th>
+      <th></th>
     </tr>
 
     <% _.each(users, function(user) { %>
@@ -19,6 +20,11 @@
         <td><%= user.title %></td>
         <td><%= user.userName %></td>
         <td><%= user.emailAddress %></td>
+        <% if(user.admin) { %>
+          <td><img src="/images/admin.png"></td>
+        <% } else { %>
+          <td><img src="/images/user.png"></td>
+        <% } %>
         <td><a href="/user/show/<%= user.id %>" class="btn btn-sm btn-primary">Detalles</a></td>
         <td><a href="/user/edit/<%= user.id %>" class="btn btn-sm btn-warning">Actualizar</a></td>
         <td>

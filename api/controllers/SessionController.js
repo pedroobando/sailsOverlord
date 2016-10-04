@@ -70,6 +70,12 @@ module.exports = {
         req.session.authenticated = true;
         req.session.User = user;
 
+        // if the user is admin redirect to user list (e.g. /views/user/index.ejs)
+        // This is used in conjunction with config/polices.js files
+        if (req.session.User.admin) {
+          return res.redirect('/user');
+        }
+
         // Redirect a la pagina del perfil
         // res.redirect('/user/show/'+ user.id);
         if (!req.session.origin_url) {
