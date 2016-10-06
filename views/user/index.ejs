@@ -2,7 +2,6 @@
   <h3>Usuarios</h3>
   <table class="table">
     <tr>
-      <th>ID</th>
       <th>Name</th>
       <th>Title</th>
       <th>User Name</th>
@@ -15,16 +14,15 @@
 
     <% _.each(users, function(user) { %>
       <tr data-id="<%= user.id %>" data-model="user">
-        <td><%= user.id %></td>
         <td><%= user.firstName %></td>
         <td><%= user.title %></td>
         <td><%= user.userName %></td>
         <td><%= user.emailAddress %></td>
         <% if(user.admin) { %>
-          <td><img src="/images/admin.png"></td>
+          <td><img src="/images/admin.png"/></td>
         <% } else { %>
-          <td><img src="/images/user.png"></td>
-        <% } %>
+          <td><img src="/images/user.png"/></td>
+          <% } %>
         <td><a href="/user/show/<%= user.id %>" class="btn btn-sm btn-primary">Detalles</a></td>
         <td><a href="/user/edit/<%= user.id %>" class="btn btn-sm btn-warning">Actualizar</a></td>
         <td>
