@@ -80,6 +80,7 @@ module.exports = {
   beforeValidate: function (values, next) {
 
     //console.log('beforeValidate:' + values.admin);
+    console.log('beforeValidate:' + values.admin);
     if (typeof values.admin !== 'undefined') {
       if (values.admin === 'unchecked') {
         values.admin = false;
@@ -125,6 +126,8 @@ module.exports = {
     //console.log(values);
     values.firstName = capitalizeFirstLetter(values.firstName);
     //values.online = true;
+    values.firstName = capitalizeFirstLetter(values.firstName);
+    values.online=true;
     next();
   }
 
@@ -132,4 +135,5 @@ module.exports = {
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }

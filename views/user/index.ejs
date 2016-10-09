@@ -2,7 +2,10 @@
   <h3>Usuarios</h3>
   <table class="table">
     <tr>
+<<<<<<< HEAD
       <th></th>
+=======
+>>>>>>> f6734f6cc773f1f9b1db4159584066a31d76ee66
       <th>Name</th>
       <th>Title</th>
       <th>User Name</th>
@@ -15,11 +18,14 @@
 
     <% _.each(users, function(user) { %>
       <tr data-id="<%= user.id %>" data-model="user">
+<<<<<<< HEAD
         <% if (user.online) { %>
           <td><img src="/images/icon-online.png"/></td>
         <% } else { %>
           <td><img src="/images/icon-offline.png"/></td>
         <% } %>
+=======
+>>>>>>> f6734f6cc773f1f9b1db4159584066a31d76ee66
         <td><%= user.firstName %></td>
         <td><%= user.title %></td>
         <td><%= user.userName %></td>

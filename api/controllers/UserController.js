@@ -53,6 +53,7 @@ module.exports = {
       //});
 
       console.log(user.firstName + ' (created)');
+      console.log(user.firstName + ' (created)')
       // Esto envia un json
       //res.json(user);
       res.redirect('/user/show/'+user.id);
