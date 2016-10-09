@@ -54,6 +54,16 @@ module.exports = {
       unique: true
     },
 
+    admin: {
+      type: 'boolean',
+      defaultsTo: true
+    },
+
+    online: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+
     encryptedPassword: {
       type: 'string' //,
       //required: true
@@ -67,6 +77,19 @@ module.exports = {
     }
   },
 
+  beforeValidate: function (values, next) {
+
+    //console.log('beforeValidate:' + values.admin);
+    if (typeof values.admin !== 'undefined') {
+      if (values.admin === 'unchecked') {
+        values.admin = false;
+      } else if (values.admin[1] === 'on') {
+        values.admin = true;
+      }
+    };
+    next();
+  },
+
   beforeCreate: function(values, next) {
 
     if (!values.password || values.password != values.confirmation) {
@@ -75,6 +98,8 @@ module.exports = {
     }
     //console.log('Verificacion password - (ok)')
     //console.log('El valor del password: ' + values.password);
+
+    values.firstName = capitalizeFirstLetter(values.firstName);
 
     var bcrypt = require('bcryptjs');
     bcrypt.hash(values.password, 10, function passwordEncrypted(err, encryptedPassword) {
@@ -92,5 +117,19 @@ module.exports = {
     //  values.confirmation=null;
     //  next();
     //});
+
+
+  },
+
+  beforeUpdate: function (values, next) {
+    //console.log(values);
+    values.firstName = capitalizeFirstLetter(values.firstName);
+    //values.online = true;
+    next();
   }
+
 };
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

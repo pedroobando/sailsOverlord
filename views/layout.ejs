@@ -53,7 +53,7 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <% if(session.authenticated) { %>
+          <% if(session.authenticated && session.User.admin) { %>
             <li><a href="/user">User Administration</a></li>
             <li><a href="#">Placeholder 2</a></li>
           <% } %>
@@ -65,11 +65,10 @@
               <!--<a href="#" class="dropdown-toggle" data><%= session.User.firstName %> </a>-->
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= session.User.firstName %>&nbsp;&nbsp;<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                <li><a href="/user/show/<%= session.User.id %>">Detalle</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="/session/destroy">logout</a></li>
-              </ul>
-
+                  <li><a href="/user/show/<%= session.User.id %>">Detalle</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="/session/destroy">logout</a></li>
+                </ul>
             </li>
             </ul>
           <% } else %>
@@ -130,7 +129,7 @@
     -->
 
     <!--TEMPLATES-->
-
+    
     <!--TEMPLATES END-->
 
 
@@ -161,6 +160,7 @@
     <script src="/js/dependencies/sails.io.js"></script>
     <script src="/js/dependencies/jquery.js"></script>
     <script src="/js/jquery.validate.js"></script>
+    <script src="/js/app.js"></script>
     <script src="/js/bootstrap.js"></script>
     <script src="/js/customvalidated.js"></script>
     <script src="/js/custonvalidated.js"></script>

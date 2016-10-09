@@ -12,9 +12,19 @@ module.exports = {
 
   create: function (req, res, next) {
 
-    User.create(req.params.all(), function userCreated(err, user) {
+    var userObj = {
+      firstName: req.param('firstName'),
+      title: req.param('title'),
+      userName: req.param('userName'),
+      emailAddress: req.param('emailAddress'),
+      password: req.param('password'),
+      confirmation: req.param('confirmation')
+      //online: true
+    };
+
+    User.create(userObj, function userCreated(err, user) {
       if (err) {
-        console.log(err);
+        //console.log(err);
         req.session.flash = {
           err: err
         }
@@ -22,11 +32,32 @@ module.exports = {
         return res.redirect('/user/new');
         //return next(err);
       }
-      console.log(user.firstName + ' (created)')
+
+      // Login - Seccion actuthenticate
+      req.session.authenticated = true;
+      req.session.User = user;
+
+      // Change status user online
+      user.online = true;
+      //console.log(user.firstName + ' (created 01)');
+      //user.save(function (err, user) {
+      //  if (err) return next(err);
+
+      //  console.log(user);
+
+      //  console.log(user.firstName + ' (created)');
+        // Esto envia un json
+        //res.json(user);
+      //  res.redirect('/user/show/'+user.id);
+        //req.session.flash = {};
+      //});
+
+      console.log(user.firstName + ' (created)');
       // Esto envia un json
       //res.json(user);
       res.redirect('/user/show/'+user.id);
       //req.session.flash = {};
+
     });
 
   },
@@ -50,7 +81,8 @@ module.exports = {
     //console.log(req.session.authenticated);
 
     // Obtiene una arreglo de todos los usuarios en una Coleccion de Usuario
-    User.find(function foundUsers(err, users) {
+    // User.find(function foundUsers(err, users) {
+    User.find({sort: 'firstName'}, function foundUsers(err, users) {
       if (err) {
         return next(err);
       }
@@ -75,7 +107,25 @@ module.exports = {
   },
 
   update: function (req, res, next) {
-    User.update(req.param('id'), req.params.all(), function updateUser(err, user) {
+
+    if (req.session.User.admin) {
+      var userObj = {
+        firstName: req.param('firstName'),
+        title: req.param('title'),
+        userName: req.param('userName'),
+        emailAddress: req.param('emailAddress'),
+        admin: req.param('admin')
+      };
+    } else {
+      var userObj = {
+        firstName: req.param('firstName'),
+        title: req.param('title'),
+        userName: req.param('userName'),
+        emailAddress: req.param('emailAddress'),
+      };
+    }
+
+    User.update(req.param('id'), userObj, function updateUser(err, user) {
 
       if (err) {
         console.log(err);
@@ -87,7 +137,14 @@ module.exports = {
       }
 
       console.log(user.firstName + ' (updated)');
-      res.redirect('/user/show/'+ req.param('id'));
+      // Actualizacion del nivel de usuario
+      //if (req.param('id') === req.session.User.id) {
+      //  req.session.User = user.admin; // true;
+        //req.session.User = user;
+      //}
+
+
+      return res.redirect('/user/show/'+ req.param('id')); //res.redirect('/user'); //
     });
   },
 
@@ -104,7 +161,27 @@ module.exports = {
       //console.log(user.firstName + ' (created)')
       res.redirect('/user');
     });
+  },
+
+
+  subscribe: function (req, res) {
+
+    if (!req.isSocket) {
+      return res.badRequest('Only a client socket can subscribe to Louies.  You, sir or madame, appear to be an HTTP request.');
+    }
+
+    User.find(function foundUsers(err, users) {
+      if (err) return next(err);
+
+      // subscribe this socket to User model classroom.
+      //User.subscribe(req.socket);
+
+      // subscribe this socket to the user instance rooms.
+      //User.subscribe(req.socket, users);
+      User.subscribe(req, _.pluck(users,'id'));
+
+      return res.ok(); //res.send(200);
+    });
   }
 
 };
-

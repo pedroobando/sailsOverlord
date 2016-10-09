@@ -70,13 +70,33 @@ module.exports = {
         req.session.authenticated = true;
         req.session.User = user;
 
-        // Redirect a la pagina del perfil
-        // res.redirect('/user/show/'+ user.id);
-        if (!req.session.origin_url) {
-          return res.redirect('/');
-        } else {
-          return res.redirect(req.session.origin_url);
-        }
+        // Change status to online - on register user
+        user.online = true;
+        userId = user.id;
+        user.save(function (err, user) {
+          if (err) return next(err);
+
+          // inform other sockets (e.g. connected sockets thas are aubscribed) that this user is now logged in
+          User.publishUpdate(userId, {
+            loggedIn: true,
+            id: userId
+          });
+
+          // if the user is admin redirect to user list (e.g. /views/user/index.ejs)
+          // This is used in conjunction with config/polices.js files
+          if (req.session.User.admin) {
+            return res.redirect('/user');
+          }
+
+          // Redirect a la pagina del perfil
+          // res.redirect('/user/show/'+ user.id);
+          if (!req.session.origin_url) {
+            return res.redirect('/');
+          } else {
+            return res.redirect(req.session.origin_url);
+          }
+
+        });
 
       });
 
@@ -87,11 +107,32 @@ module.exports = {
   },
 
   destroy: function (req, res, next) {
-    // borra la seccion activa.
-    req.session.destroy();
+    User.findOne(req.session.User.id, function foundUser(err, user) {
 
-    // redidirige para loguearse de nuevo
-    res.redirect('/session/new');
+      var userId = req.session.User.id;
+      // The yser is "logging out" (e.g. destroyin the session) so change the online attribute to false.
+      user.online = false;
+      //console.log('logout - before - actaulizacion de usuario: '+user.firstName);
+      User.update(userId, user, function updateUser(err, userupd) {
+        if (err) {
+          //console.log(err);
+          return next(err);
+        }
+
+          // inform other sockets (e.g. connected sockets thas are aubscribed) that this user is now logged in
+          User.publishUpdate(userId, {
+            loggedIn: false,
+            id: userId
+          });
+
+        //console.log('logout - after - actaulizacion de usuario: '+userupd.firstName);
+        // Wipe out the session (log out)
+        req.session.destroy();
+        // Redirect the browse to the sing-in screen
+        res.redirect('/session/new');
+      });
+
+    });
   }
 
 };
